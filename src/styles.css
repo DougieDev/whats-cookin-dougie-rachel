@@ -2,6 +2,10 @@
   font-family: 'Cabin', sans-serif;
 }
 
+.hidden {
+  display: none;
+}
+
 header {
   background-color: #A0C4FF;
   padding: 1em;
@@ -103,4 +107,42 @@ h2 {
 h5 {
   font-size: 16px;
   text-align: center;
+}
+
+.single-recipe-view {
+  margin-top: 3em;
+  text-align: center;
+}
+
+.recipe-details {
+  width: 75%;
+  border: 2px solid black;
+  background-color: #f8f8ff;
+  opacity: 0.8;
+  display: inline-block;
+  padding-right: 2em;
+  padding-left: 2em;
+}
+
+.recipe-name {
+  text-align: left;
+  font-size: 32px;
+}
+
+.recipe-name-ingredients {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ingredients-box {
+  border: 1px dotted black;
+  width: 100%;
+  margin-right: 2em;
+  text-align: left;
+  padding-left: 1em;
+}
+
+.recipe-instructions {
+  text-align: left;
+  padding-left: 1.5em;
 }

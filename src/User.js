@@ -1,5 +1,3 @@
-// let ingredientsData1 = require('../data/ingredients')
-
 class User {
   constructor(usersData) {
     this.name = usersData.name
@@ -11,7 +9,7 @@ class User {
   }
 
   toggleFavoriteRecipe(recipe) {
-    if(this.favoriteRecipes.includes(recipe)) {
+    if (this.favoriteRecipes.includes(recipe)) {
       let index = this.favoriteRecipes.indexOf(recipe)
       this.favoriteRecipes.splice(index, 1);
     } else {
@@ -20,7 +18,7 @@ class User {
   }
 
   toggleRecipeToCook(recipe) {
-    if(this.recipesToCook.includes(recipe)) {
+    if (this.recipesToCook.includes(recipe)) {
       let index = this.recipesToCook.indexOf(recipe)
       this.recipesToCook.splice(index, 1);
     } else {

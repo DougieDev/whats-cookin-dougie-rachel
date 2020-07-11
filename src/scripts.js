@@ -1,6 +1,8 @@
 const recipeCardsSection = document.querySelector('.recipe-cards')
 const pageBody = document.querySelector('body');
-let recipes; 
+const homeSection = document.querySelector('.home-view');
+const singleRecipeSection = document.querySelector('.single-recipe-view');
+let recipes, user; 
 
 window.onload = setUpHomePage; 
 //instantiate random User on page load as well, and display their name in H2
@@ -9,13 +11,13 @@ pageBody.addEventListener('click', clickAnalyzer);
 
 function clickAnalyzer(event) {
   if (event.target.classList.contains('heart')) {
-    console.log('favorited!')
-    //add the recipe to the user's favorite recipes (target.parentElement.parentElement.parentElement.id to get index of recipe in recipes?)
+    toggleRecipeToUserFavorites(event);
+    indicateRecipeInFavorites(event, 'heart');  
   } else if (event.target.classList.contains('cookbook')) {
-    console.log('Add me to meal plan!')
-    //add the recipe to the user's meals to cook/meal plan recipes (target.parentElement.parentElement.parentElement.id to get index of recipe in recipes?)
+    toggleRecipeToRecipesToCook(event)
+    indicateRecipeInFavorites(event, 'recipe');
   } else if (event.target.closest('.recipe-card')) {
-    //display that recipe (hide home view, un-hide recipe view, interpolating info from recipe clicked; can possibly use unique html id associated with each recipe card to identify it (target.parentElement.id grabs unique html id, which is the same as the index of that recipe in recipes))
+    displaySingleRecipe(event);
   } else if (event.target.closest('header')) {
     event.preventDefault();
     console.log('clicking header!')
@@ -23,10 +25,33 @@ function clickAnalyzer(event) {
   };
 }
 
+function toggleRecipeToUserFavorites(event) {
+  let recipe = determineRecipeToDisplay(event); 
+  user.toggleFavoriteRecipe(recipe); 
+}
+
+function toggleRecipeToRecipesToCook(event) {
+  let recipe = determineRecipeToDisplay(event);
+  user.toggleRecipeToCook(recipe);
+}
+
+function indicateRecipeInFavorites(event, icon) {
+  if (event.target.classList.contains('inactive')) {
+    event.target.src = `assets/${icon}-active.png`;
+    event.target.classList.remove('inactive');
+    event.target.classList.add('active');
+  } else {
+    event.target.src = `assets/${icon}-inactive.png`; 
+    event.target.classList.remove('active');
+    event.target.classList.add('inactive');
+  };
+}
 
 function setUpHomePage() {
   recipes = instantiateRecipes(recipeData);
   displayRecipes(recipes);
+  createRandomUser(); 
+  displayUserName(); 
 }
 
 function instantiateRecipes(recipeData) {
@@ -39,10 +64,10 @@ function displayRecipes(recipes) {
       <article class="recipe-card" id="card${index}">
         <div class="recipe-img" style="background-image: url(${recipe.image})">
           <div class="heart-icon">
-            <img src="assets/heart.png" class="heart">
+            <img src="assets/heart-inactive.png" class="heart inactive">
           </div>
           <div class="cook-icon">
-            <img src="assets/recipe-book.png" class="cookbook">
+            <img src="assets/recipe-inactive.png" class="cookbook inactive">
           </div>
         </div>
         <div class="recipe-name">
@@ -51,6 +76,76 @@ function displayRecipes(recipes) {
       </article>
     `)
   })
+}
+
+function createRandomUser() {
+  let randomIndex = Math.floor(Math.random() * usersData.length);
+  user = new User(usersData[randomIndex]);
+}
+
+function displayUserName() {
+  let welcomeHeading = document.querySelector('.welcome-heading');
+  welcomeHeading.innerText = `Welcome, ${user.name}! Browse Our Recipes Below.`;
+}
+
+function displaySingleRecipe(event) {
+  changeToSingleRecipeView();
+  const recipe = determineRecipeToDisplay(event);
+  displayRecipeDetails(recipe);
+}
+
+function changeToSingleRecipeView() {
+  homeSection.classList.add('hidden');
+  singleRecipeSection.classList.remove('hidden');
+}
+
+function determineRecipeToDisplay(event) {
+  let recipeCardId = event.target.closest('.recipe-card').id;
+  let recipeCardIndex = recipeCardId.slice(4);
+  let recipeToDisplay = recipes[recipeCardIndex];
+  return recipeToDisplay;
+}
+
+function displayRecipeDetails(recipe) {
+  let recipeIngredientsList = createIngredientsList(recipe);
+  let recipeInstructions = createInstructionsList(recipe); 
+  const recipeBox = document.querySelector('.recipe-details');
+  recipeBox.insertAdjacentHTML('afterBegin', `
+    <h2 class="recipe-name">${recipe.name}</h2>
+    <section class="recipe-name-ingredients">
+      <div class="ingredients-box">
+        <h3>Ingredients</h3>
+        <ul>${recipeIngredientsList}</ul>
+      </div>
+      <div class="image-box">
+        <img src=${recipe.image}>
+      </div>
+    </section>
+    <section class="recipe-instructions">
+      <h3>Instructions</h3>
+      <ol>${recipeInstructions}</ol>
+    </section>
+  `);
+}
+
+function createIngredientsList(recipe) {
+  return recipe.ingredients.reduce((ingredientsList, ingredient) => {
+    ingredientsList += `<li>${ingredient.quantity.amount} ${ingredient.quantity.unit} ${getIngredientName(ingredient.id)}</li>`;
+    return ingredientsList;
+  }, '');
+}
+
+function createInstructionsList(recipe) {
+  return recipe.instructions.reduce((instructionsList, instruction) => {
+    instructionsList += `<li>${instruction.instruction}</li>`;
+    return instructionsList;
+  }, '');
+}
+
+
+function getIngredientName(ingredientId) {
+  const ingredient = ingredientsData.find(ingredient => ingredient.id === ingredientId);
+  return ingredient.name; 
 }
 
 
