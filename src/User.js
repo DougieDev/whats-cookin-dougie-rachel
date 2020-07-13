@@ -1,6 +1,3 @@
-//Note: the below line breaks scripts.js
-//If you comment it out, scripts.js works, but test no longer works
-//Look into this more (other groups have same problem)
 const Pantry = require('../src/Pantry');
 
 class User {
@@ -36,12 +33,13 @@ class User {
   }
 
   filterRecipeByTag(tag) {
-    let savedRecipes = this.getSavedRecipes()
+    let savedRecipes = this.getSavedRecipes();
     return savedRecipes.filter(recipe => {
-      return recipe.tags.includes(tag)
-    })
+      return recipe.tags.includes(tag);
+    });
   }
 }
+
 if (typeof module !== 'undefined') {
   module.exports = User;
 }
