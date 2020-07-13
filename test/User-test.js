@@ -70,8 +70,13 @@ describe('User', function() {
       {instruction: 'Add tomato sauce.', number: 2},
       {instruction: 'Top with basil and eat.', number: 3}
     ];
-    recipe1 = new Recipe(5, 'https://spoonacular.com/recipeImages/595736-556x370.jpg', ingredients1, instructions1, 'Boring Cookies', ['dessert','antipasti']);
-    recipe2 = new Recipe(9, 'https://spoonacular.com/recipeImages/678353-556x370.jpg', ingredients2, instructions2, 'Pasta with Tomato Sauce', ['lunch','dinner']); 
+    recipe1 = new Recipe(5,
+      'https://spoonacular.com/recipeImages/595736-556x370.jpg',
+      ingredients1,
+      instructions1,
+      'Boring Cookies',
+      ['dessert','antipasti']);
+    recipe2 = new Recipe(9, 'https://spoonacular.com/recipeImages/678353-556x370.jpg', ingredients2, instructions2, 'Pasta with Tomato Sauce', ['lunch','dinner']);
   });
 
   it('should be a function', function() {
@@ -169,8 +174,18 @@ describe('User', function() {
     user1.toggleFavoriteRecipe(recipe1);
     user1.toggleRecipeToCook(recipe2);
 
-    let savedRecipes = user1.getSavedRecipes(); 
+    let savedRecipes = user1.getSavedRecipes();
 
     expect(savedRecipes).to.deep.equal([recipe1, recipe2])
   });
+
+  it('should be able to filter recipes by category tag', function() {
+    user1.toggleFavoriteRecipe(recipe1);
+    user1.toggleRecipeToCook(recipe2);
+    user1.filterRecipeByTag("dessert")
+
+    let filteredRecipes = user1.filterRecipeByTag("dessert")
+
+    expect(filteredRecipes).to.deep.equal([recipe1])
+  })
 });
