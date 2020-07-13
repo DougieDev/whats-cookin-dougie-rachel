@@ -201,6 +201,7 @@ function displayRecipeDetails(recipe) {
   let recipeIngredientsList = createIngredientsList(recipe);
   let recipeInstructions = createInstructionsList(recipe);
   const recipeBox = document.querySelector('.recipe-details');
+  recipeBox.innerHTML = ''
   recipeBox.insertAdjacentHTML('afterBegin', `
     <h2 class="recipe-name">${recipe.name}</h2>
     <section class="recipe-name-ingredients">
