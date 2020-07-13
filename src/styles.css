@@ -114,7 +114,7 @@ h5 {
   text-align: center;
 }
 
-.recipe-details, .grocery-list {
+.recipe-details, .list {
   width: 72%;
   border: 2px solid black;
   background-color: #f8f8ff;
@@ -124,7 +124,7 @@ h5 {
   padding-left: 2em;
 }
 
-.grocery-list {
+.list {
   text-align: left;
 }
 
@@ -151,6 +151,6 @@ h5 {
   padding-left: 1.5em;
 }
 
-.grocery-items {
+.list-items {
   font-size: 18px;
 }

@@ -3,7 +3,7 @@ class Pantry {
     this.ingredients = ingredients || [];
   }
 
-  checkForRecipeIngredients = recipe => {
+  checkForRecipeIngredients(recipe) {
     return recipe.ingredients.every(recipeIngredient => {
       if (this.checkIngredientStockInPantry(recipeIngredient) > 0) {
         return false;

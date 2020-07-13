@@ -26,6 +26,7 @@ function clickAnalyzer(event) {
   };
 }
 
+//refactor below function when it's complete to group the functions it calls
 function determineHeaderClick(event) {
   if (event.target.classList.contains('category')) {
     getRecipesInCategory(event);
@@ -36,32 +37,41 @@ function determineHeaderClick(event) {
     changeSearchBarText('Search recipes');
   };
   if (event.target.id === 'favorite-recipes') {
-    displayRecipeBoxH2('Favorite Recipes');
+    changeView(homeSection, singleRecipeSection, listSection);
+    displayOtherH2('Favorite Recipes');
     displayRecipes(user.favoriteRecipes);
     changeSearchBarText('Search saved recipes');
   };
   if (event.target.id === 'recipes-to-cook') {
-    displayRecipeBoxH2('Recipes to Cook');
+    changeView(homeSection, singleRecipeSection, listSection);
+    displayOtherH2('Recipes to Cook');
     displayRecipes(user.recipesToCook);
     changeSearchBarText('Search saved recipes');
   };
-  if (event.target.id === 'grocery-list') {
+  if (event.target.id === 'pantry-menu') {
     changeView(listSection, homeSection, singleRecipeSection);
+    displayListH2('Pantry Items');
+    let pantryIngredientsList = createPantryWithIngredientNames();
+    displayListItems(pantryIngredientsList); 
+  }
+  if (event.target.id === 'grocery-list-menu') {
+    changeView(listSection, homeSection, singleRecipeSection);
+    displayListH2('Grocery List');
     createGroceryList();
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
     // let recipesToDisplay = getSavedRecipesFromSearch();
     let savedRecipes = user.getSavedRecipes();
     let recipesToDisplay = getRecipesFromSearch(savedRecipes);
-    displayRecipeBoxH2('Saved Recipes Search Results');
+    displayOtherH2('Saved Recipes Search Results');
     displayRecipes(recipesToDisplay);
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search recipes') {
     // let recipesToDisplay = getAllRecipesFromSearch(); 
     let recipesToDisplay = getRecipesFromSearch(recipes);
-    displayRecipeBoxH2('Search Results');
+    displayOtherH2('Search Results');
     displayRecipes(recipesToDisplay);
-  }
+  };
 }
 
 function changeSearchBarText(text) {
@@ -159,8 +169,13 @@ function toggleRecipeIconDisplay(event, icon) {
   };
 }
 
-function displayRecipeBoxH2(pageTitle) {
+function displayOtherH2(pageTitle) {
   welcomeHeading.innerText = `${user.name}'s ${pageTitle}`;
+}
+
+function displayListH2(pageTitle) {
+  let listHeading = document.querySelector('.list-heading');
+  listHeading.innerText = `${user.name}'s ${pageTitle}`;
 }
 
 function displaySingleRecipe(event) {
@@ -230,4 +245,20 @@ function getRecipesFromSearch(recipesToSearch) {
       return recipe;
     };
   });
+}
+
+function createPantryWithIngredientNames() {
+  return pantryWithIngredientsName = user.pantry.ingredients.map(ingredient => {
+    return ({name: getIngredientName(ingredient.ingredient), amount: ingredient.amount}); 
+  });
+}
+
+function displayListItems(list) {
+  let itemsList = document.querySelector('.list-items');
+  // itemsList.innerHTML = '';
+  let bulletPoints = list.reduce((listDisplayBullets, listItem) => {
+    listDisplayBullets += `<li>${listItem.amount} ${listItem.name}</li>`;
+    return listDisplayBullets; 
+  }, '');
+  itemsList.innerHTML = bulletPoints;
 }
