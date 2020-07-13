@@ -57,17 +57,16 @@ function determineHeaderClick(event) {
   if (event.target.id === 'grocery-list-menu') {
     changeView(listSection, homeSection, singleRecipeSection);
     displayListH2('Grocery List');
-    createGroceryList();
+    let groceryList = createGroceryList(user.recipesToCook);
+    displayListItems(groceryList);
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
-    // let recipesToDisplay = getSavedRecipesFromSearch();
     let savedRecipes = user.getSavedRecipes();
     let recipesToDisplay = getRecipesFromSearch(savedRecipes);
     displayOtherH2('Saved Recipes Search Results');
     displayRecipes(recipesToDisplay);
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search recipes') {
-    // let recipesToDisplay = getAllRecipesFromSearch(); 
     let recipesToDisplay = getRecipesFromSearch(recipes);
     displayOtherH2('Search Results');
     displayRecipes(recipesToDisplay);
@@ -78,15 +77,40 @@ function changeSearchBarText(text) {
   searchBar.placeholder = text; 
 }
 
-function createGroceryList() {
-  //need empty array (which will become array of objects as grocery list)
-  //Take user.recipesToCook array
-  //for each recipe in it, iterate through its ingredients list
-  //for each recipe ingredient, user.pantry.checkIngredientStockInPantry(recipeIngredient) to get back missing amount of that ingredient
-  //add amount + ingredient.unit + ingredient name into an object & add to the empty array
-  //after iteration is done return that array of objects as the grocery list
-  //then create function to display Grocery List
+function createGroceryList(recipes) {
+  let ingredientsList = createInitialIngredientsList(recipes);
+  let namedIngredientsList = createNamedIngredientsList(ingredientsList);
+  return combineGroceryListDuplicates(namedIngredientsList); 
 }
+
+function createInitialIngredientsList(recipes) {
+  return recipes.reduce((totalMissingIngredientsList, recipe) => {
+    let missingIngredients = user.pantry.listMissingIngredients(recipe);
+    totalMissingIngredientsList = totalMissingIngredientsList.concat(missingIngredients);
+    return totalMissingIngredientsList;
+  }, []); 
+}
+
+function createNamedIngredientsList(ingredientsList) {
+  return ingredientsList.map(ingredient => {
+    return ({ name: getIngredientName(ingredient.ingredientId), amount: ingredient.missingAmount });
+  });
+}
+
+function combineGroceryListDuplicates(ingredientsList) {
+  return ingredientsList.reduce((uniqueIngredients, neededIngredient) => {
+    let indexOfDuplicate = uniqueIngredients.findIndex(ingredient => ingredient.name === neededIngredient.name);
+    if (indexOfDuplicate !== -1) {
+      let totalAmount = uniqueIngredients[indexOfDuplicate].amount + neededIngredient.amount;
+      uniqueIngredients[indexOfDuplicate].amount = totalAmount;
+    } else {
+      uniqueIngredients.push(neededIngredient);
+    };
+    return uniqueIngredients;
+  }, []);
+}
+
+  //also need to get cost of those ingredients & display total estimated cost (for each recipe, recipe.calculateIngredientsCost(ingredients), then sum costs together)
 
 function setUpHomePage() {
   recipes = instantiateRecipes(recipeData);

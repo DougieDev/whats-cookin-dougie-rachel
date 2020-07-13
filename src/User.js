@@ -1,4 +1,4 @@
-const Pantry = require('../src/Pantry');
+// const Pantry = require('../src/Pantry');
 
 class User {
   constructor(name, id, pantry) {
