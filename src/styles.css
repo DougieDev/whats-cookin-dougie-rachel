@@ -154,3 +154,19 @@ h5 {
 .list-items {
   font-size: 18px;
 }
+
+.grocery-cost {
+  margin-top: 1em; 
+  text-align: left;
+  border: 2px solid black;
+  display: inline-block;
+  height: auto; 
+  background-color: #FFADAD;
+}
+
+.cost-text {
+  padding-left: 1em;
+  padding-right: 1em; 
+  text-align: left;
+  font-weight: bolder; 
+}

@@ -3,6 +3,7 @@ class Pantry {
     this.ingredients = ingredients || [];
   }
 
+  //is this function actually needed? Look into it later
   checkForRecipeIngredients(recipe) {
     return recipe.ingredients.every(recipeIngredient => {
       if (this.checkIngredientStockInPantry(recipeIngredient) > 0) {
@@ -29,7 +30,9 @@ class Pantry {
   listMissingIngredients(recipe) {
     return recipe.ingredients.reduce((missingIngredients, ingredient) => {
       let missingIngredientAmount = this.checkIngredientStockInPantry(ingredient);
-      missingIngredients.push({ingredientId: ingredient.id, missingAmount: missingIngredientAmount});
+      if (missingIngredientAmount > 0) {
+        missingIngredients.push({ingredientId: ingredient.id, missingAmount: missingIngredientAmount});
+      };
       return missingIngredients;
     }, [])
   }
