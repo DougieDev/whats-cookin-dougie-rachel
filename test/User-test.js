@@ -6,20 +6,22 @@ const Recipe = require('../src/Recipe');
 const Pantry = require('../src/Pantry');
 
 describe('User', function() {
-  let pantry1, user1, pantry2, user2, recipe1, recipe2;
+  let pantry1Info, pantry1, user1, pantry2Info, pantry2, user2, recipe1, recipe2;
   beforeEach(function() {
-    pantry1 = [
+    pantry1Info = [
       {ingredient: 11477, amount: 4},
       {ingredient: 11297, amount: 4},
       {ingredient: 1082047, amount: 10}
     ];
+    pantry1 = new Pantry(pantry1Info)
     user1 = new User('Rachel', 1, pantry1);
-    pantry2 = [
+    pantry2Info = [
       {ingredient: 6150, amount: 3},
       {ingredient: 1032009, amount: 7},
       {ingredient: 1082047, amount: 8},
       {ingredient: 47829, amount: 2}
     ];
+    pantry2 = new Pantry(pantry2Info);
     user2 = new User('Dougie', 2, pantry2);
     ingredients1 = [
       {
