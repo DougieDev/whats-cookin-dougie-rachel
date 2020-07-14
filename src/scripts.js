@@ -87,6 +87,31 @@ function showRecipeInToCook(event, icon) {
   toggleRecipeIconDisplay(event, icon);
 }
 
+function toggleRecipeToUserFavorites(event) {
+  let recipe = determineRecipeToDisplay(event);
+  user.toggleFavoriteRecipe(recipe);
+  recipe.toggleFavoritesStatus();
+}
+
+function toggleRecipeToRecipesToCook(event) {
+  let recipe = determineRecipeToDisplay(event);
+  user.toggleRecipeToCook(recipe);
+  recipe.toggleRecipesToCookStatus();
+}
+
+function toggleRecipeIconDisplay(event, icon) {
+  if (event.target.classList.contains('inactive')) {
+    event.target.src = `assets/${icon}-active.png`;
+    event.target.classList.remove('inactive');
+    event.target.classList.add('active');
+  } else {
+    event.target.src = `assets/${icon}-inactive.png`;
+    event.target.classList.remove('active');
+    event.target.classList.add('inactive');
+  };
+}
+
+
 function displaySingleRecipe(event) {
   changeView(singleRecipeSection, homeSection, listSection);
   const recipe = determineRecipeToDisplay(event);
@@ -120,15 +145,17 @@ function determineHeaderClick(event) {
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
     let savedRecipes = user.getSavedRecipes();
-    let recipesToDisplay = getRecipesFromSearch(savedRecipes);
-    displayOtherH2('Saved Recipes Search Results');
-    displayRecipes(recipesToDisplay);
+    displaySearchResults(savedRecipes, 'Saved Recipes Search Results')
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search recipes') {
-    let recipesToDisplay = getRecipesFromSearch(recipes);
-    displayOtherH2('Search Results');
-    displayRecipes(recipesToDisplay);
+    displaySearchResults(recipes, 'Search Results')
   };
+}
+
+function displaySearchResults(recipesToSearch, heading) {
+  let recipesToDisplay = getRecipesFromSearch(recipesToSearch);
+  displayOtherH2(heading);
+  displayRecipes(recipesToDisplay);
 }
 
 function analyzeStateForCategory(event) {
@@ -153,7 +180,7 @@ function getRecipesInCategory(event, recipes) {
 function displayAppropriateRecipesInView(activeView, viewToHide1, viewToHide2, recipes, text) {
   changeView(homeSection, singleRecipeSection, listSection);
   displayRecipes(recipes);
-  changeSearchBarText('Search recipes');
+  changeSearchBarText(text);
 }
 
 function changeView(activeView, viewToHide1, viewToHide2) {
@@ -255,30 +282,6 @@ function getGroceryListCost(recipes) {
   }, 0);
   let costInDollars = (costInCents/100).toFixed(2);
   return costInDollars;
-}
-
-function toggleRecipeToUserFavorites(event) {
-  let recipe = determineRecipeToDisplay(event);
-  user.toggleFavoriteRecipe(recipe);
-  recipe.toggleFavoritesStatus();
-}
-
-function toggleRecipeToRecipesToCook(event) {
-  let recipe = determineRecipeToDisplay(event);
-  user.toggleRecipeToCook(recipe);
-  recipe.toggleRecipesToCookStatus();
-}
-
-function toggleRecipeIconDisplay(event, icon) {
-  if (event.target.classList.contains('inactive')) {
-    event.target.src = `assets/${icon}-active.png`;
-    event.target.classList.remove('inactive');
-    event.target.classList.add('active');
-  } else {
-    event.target.src = `assets/${icon}-inactive.png`;
-    event.target.classList.remove('active');
-    event.target.classList.add('inactive');
-  };
 }
 
 function determineRecipeToDisplay(event) {
