@@ -6,16 +6,16 @@ const listSection = document.querySelector('.list-view');
 let itemsList = document.querySelector('.list-items');
 const welcomeHeading = document.querySelector('.welcome-heading');
 const searchBar = document.querySelector('.search-bar');
-let recipes, user, ingredients; 
+let recipes, user, ingredients, pantry;
 
-window.onload = setUpHomePage; 
+window.onload = setUpHomePage;
 
 pageBody.addEventListener('click', clickAnalyzer);
 
 function clickAnalyzer(event) {
   if (event.target.classList.contains('heart')) {
     toggleRecipeToUserFavorites(event);
-    toggleRecipeIconDisplay(event, 'heart');  
+    toggleRecipeIconDisplay(event, 'heart');
   } else if (event.target.classList.contains('cookbook')) {
     toggleRecipeToRecipesToCook(event)
     toggleRecipeIconDisplay(event, 'cookbook');
@@ -23,7 +23,7 @@ function clickAnalyzer(event) {
     displaySingleRecipe(event);
   } else if (event.target.closest('header')) {
     event.preventDefault();
-    determineHeaderClick(event); 
+    determineHeaderClick(event);
   };
 }
 
@@ -53,7 +53,7 @@ function determineHeaderClick(event) {
     changeView(listSection, homeSection, singleRecipeSection);
     displayListH2('Pantry Items');
     let pantryIngredientsList = createPantryWithIngredientNames();
-    displayListItems(pantryIngredientsList); 
+    displayListItems(pantryIngredientsList);
   }
   if (event.target.id === 'grocery-list-menu') {
     changeView(listSection, homeSection, singleRecipeSection);
@@ -77,7 +77,7 @@ function determineHeaderClick(event) {
 }
 
 function changeSearchBarText(text) {
-  searchBar.placeholder = text; 
+  searchBar.placeholder = text;
 }
 
 function createGroceryList(recipes) {
@@ -88,7 +88,7 @@ function createGroceryList(recipes) {
 
 function createInitialIngredientsList(recipes) {
   return recipes.reduce((totalMissingIngredientsList, recipe) => {
-    let missingIngredients = user.pantry.listMissingIngredients(recipe);
+    let missingIngredients = pantry.listMissingIngredients(recipe);
     totalMissingIngredientsList = totalMissingIngredientsList.concat(missingIngredients);
     return totalMissingIngredientsList;
   }, []); 
@@ -126,16 +126,21 @@ function setUpHomePage() {
   recipes = instantiateRecipes(recipeData);
   ingredients = instantiateIngredients(ingredientsData);
   displayRecipes(recipes);
-  createRandomUser(); 
-  displayWelcomeH2(); 
+  createRandomUser();
+  instantiatePantry(user);
+  displayWelcomeH2();
 }
 
 function instantiateRecipes(recipeData) {
-  return recipeData.map(recipe => new Recipe(recipe.id, recipe.image, recipe.ingredients, recipe.instructions, recipe.name, recipe.tags)); 
+  return recipeData.map(recipe => new Recipe(recipe.id, recipe.image, recipe.ingredients, recipe.instructions, recipe.name, recipe.tags));
 }
 
 function instantiateIngredients(ingredientsData) {
-  return ingredientsData.map(ingredient => new Ingredient(ingredient)); 
+  return ingredientsData.map(ingredient => new Ingredient(ingredient));
+}
+
+function instantiatePantry(user) {
+  pantry = new Pantry(user.pantry); 
 }
 
 function displayRecipes(recipesList) {
@@ -233,8 +238,9 @@ function determineRecipeToDisplay(event) {
 
 function displayRecipeDetails(recipe) {
   let recipeIngredientsList = createIngredientsList(recipe);
-  let recipeInstructions = createInstructionsList(recipe); 
+  let recipeInstructions = createInstructionsList(recipe);
   const recipeBox = document.querySelector('.recipe-details');
+  recipeBox.innerHTML = ''
   recipeBox.insertAdjacentHTML('afterBegin', `
     <h2 class="recipe-name">${recipe.name}</h2>
     <section class="recipe-name-ingredients">
@@ -269,7 +275,7 @@ function createInstructionsList(recipe) {
 
 function getIngredientName(ingredientId) {
   const ingredient = ingredientsData.find(ingredient => ingredient.id === ingredientId);
-  return ingredient.name; 
+  return ingredient.name;
 }
 
 function getRecipesFromSearch(recipesToSearch) {
@@ -282,24 +288,27 @@ function getRecipesFromSearch(recipesToSearch) {
 }
 
 function createPantryWithIngredientNames() {
-  return pantryWithIngredientsName = user.pantry.ingredients.map(ingredient => {
-    return ({name: getIngredientName(ingredient.ingredient), amount: ingredient.amount}); 
+  return pantryWithIngredientsName = pantry.ingredients.map(ingredient => {
+    return ({name: getIngredientName(ingredient.ingredient), amount: ingredient.amount});
   });
 }
 
 function displayListItems(list) {
-  // itemsList.innerHTML = '';
   let bulletPoints = list.reduce((listDisplayBullets, listItem) => {
     listDisplayBullets += `<li>${listItem.amount} ${listItem.name}</li>`;
-    return listDisplayBullets; 
+    return listDisplayBullets;
   }, '');
   itemsList.innerHTML = bulletPoints;
 }
 
-  function displayGroceryListCost(cost) {
-    itemsList.innerHTML += `
-      <div class="grocery-cost">
+function displayGroceryListCost(cost) {
+  itemsList.innerHTML += `
+    <div class="grocery-cost">
       <p class="cost-text">Total Estimated Cost: $${cost}</p>
-      </div>
+    </div>
     `
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = scripts;
 }
