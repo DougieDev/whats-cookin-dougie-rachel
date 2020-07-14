@@ -3,6 +3,7 @@ const pageBody = document.querySelector('body');
 const homeSection = document.querySelector('.home-view');
 const singleRecipeSection = document.querySelector('.single-recipe-view');
 const listSection = document.querySelector('.list-view');
+let itemsList = document.querySelector('.list-items');
 const welcomeHeading = document.querySelector('.welcome-heading');
 const searchBar = document.querySelector('.search-bar');
 let recipes, user, ingredients; 
@@ -59,6 +60,8 @@ function determineHeaderClick(event) {
     displayListH2('Grocery List');
     let groceryList = createGroceryList(user.recipesToCook);
     displayListItems(groceryList);
+    let cost = getGroceryListCost(user.recipesToCook);
+    displayGroceryListCost(cost);
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
     let savedRecipes = user.getSavedRecipes();
@@ -116,6 +119,7 @@ function getGroceryListCost(recipes) {
     return totalCost + recipeCost; 
   }, 0);
   let costInDollars = (costInCents/100).toFixed(2);
+  return costInDollars;
 }
 
 function setUpHomePage() {
@@ -284,11 +288,18 @@ function createPantryWithIngredientNames() {
 }
 
 function displayListItems(list) {
-  let itemsList = document.querySelector('.list-items');
   // itemsList.innerHTML = '';
   let bulletPoints = list.reduce((listDisplayBullets, listItem) => {
     listDisplayBullets += `<li>${listItem.amount} ${listItem.name}</li>`;
     return listDisplayBullets; 
   }, '');
   itemsList.innerHTML = bulletPoints;
+}
+
+  function displayGroceryListCost(cost) {
+    itemsList.innerHTML += `
+      <div class="grocery-cost">
+      <p class="cost-text">Total Estimated Cost: $${cost}</p>
+      </div>
+    `
 }
