@@ -26,6 +26,10 @@ h1 {
   font-size: 38px;
 }
 
+h1:hover {
+  cursor: pointer; 
+}
+
 nav {
   padding-top: 3em;
 }
