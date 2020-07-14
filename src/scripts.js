@@ -249,7 +249,6 @@ function getRecipesFromSearch(recipesToSearch) {
 }
 
 function createPantryWithIngredientNames() {
-  console.log(user.pantry)
   return pantryWithIngredientsName = user.pantry.map(ingredient => {
     return ({name: getIngredientName(ingredient.ingredient), amount: ingredient.amount});
   });
@@ -263,4 +262,8 @@ function displayListItems(list) {
     return listDisplayBullets;
   }, '');
   itemsList.innerHTML = bulletPoints;
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = scripts;
 }
