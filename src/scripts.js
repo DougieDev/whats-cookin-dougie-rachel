@@ -12,6 +12,58 @@ window.onload = setUpHomePage;
 
 pageBody.addEventListener('click', clickAnalyzer);
 
+function setUpHomePage() {
+  recipes = instantiateRecipes(recipeData);
+  ingredients = instantiateIngredients(ingredientsData);
+  user = createRandomUser();
+  pantry = instantiatePantry(user);
+  displayRecipes(recipes);
+  displayWelcomeH2();
+}
+
+function instantiateRecipes(recipeData) {
+  return recipeData.map(recipe => new Recipe(recipe.id, recipe.image, recipe.ingredients, recipe.instructions, recipe.name, recipe.tags));
+}
+
+function instantiateIngredients(ingredientsData) {
+  return ingredientsData.map(ingredient => new Ingredient(ingredient));
+}
+
+function createRandomUser() {
+  let randomIndex = Math.floor(Math.random() * usersData.length);
+  return new User(usersData[randomIndex].name, usersData[randomIndex].id, usersData[randomIndex].pantry);
+}
+
+function instantiatePantry(user) {
+  return new Pantry(user.pantry);
+}
+
+function displayRecipes(recipesList) {
+  recipeCardsSection.innerHTML = '';
+  recipesList.forEach((recipeInList) => {
+    let index = recipes.findIndex(recipe => recipe.name === recipeInList.name);
+    recipeCardsSection.insertAdjacentHTML('beforeend', `
+      <article class="recipe-card" id="card${index}">
+        <div class="recipe-img" style="background-image: url(${recipeInList.image})">
+          <div class="heart-icon">
+            <img src="assets/heart-${recipeInList.favoritesStatus}.png" class="heart ${recipeInList.favoritesStatus}">
+          </div>
+          <div class="cook-icon">
+            <img src="assets/cookbook-${recipeInList.recipesToCookStatus}.png" class="cookbook ${recipeInList.recipesToCookStatus}">
+          </div>
+        </div>
+        <div class="recipe-name">
+          <h5 class="recipe-title">${recipeInList.name}</h5>
+        </div>
+      </article>
+    `)
+  });
+}
+
+function displayWelcomeH2(category = 'Recipes') {
+  welcomeHeading.innerText = `Welcome, ${user.name}! Browse Our ${category} Below.`;
+}
+
 function clickAnalyzer(event) {
   if (event.target.classList.contains('heart')) {
     showRecipeInFavorites(event, 'heart');
@@ -33,6 +85,12 @@ function showRecipeInFavorites(event, icon) {
 function showRecipeInToCook(event, icon) {
   toggleRecipeToRecipesToCook(event);
   toggleRecipeIconDisplay(event, icon);
+}
+
+function displaySingleRecipe(event) {
+  changeView(singleRecipeSection, homeSection, listSection);
+  const recipe = determineRecipeToDisplay(event);
+  displayRecipeDetails(recipe);
 }
 
 //refactor below function when it's complete to group the functions it calls
@@ -134,58 +192,6 @@ function getGroceryListCost(recipes) {
   return costInDollars;
 }
 
-function setUpHomePage() {
-  recipes = instantiateRecipes(recipeData);
-  ingredients = instantiateIngredients(ingredientsData);
-  displayRecipes(recipes);
-  createRandomUser();
-  instantiatePantry(user);
-  displayWelcomeH2();
-}
-
-function instantiateRecipes(recipeData) {
-  return recipeData.map(recipe => new Recipe(recipe.id, recipe.image, recipe.ingredients, recipe.instructions, recipe.name, recipe.tags));
-}
-
-function instantiateIngredients(ingredientsData) {
-  return ingredientsData.map(ingredient => new Ingredient(ingredient));
-}
-
-function instantiatePantry(user) {
-  pantry = new Pantry(user.pantry); 
-}
-
-function displayRecipes(recipesList) {
-  recipeCardsSection.innerHTML = '';
-  recipesList.forEach((recipeInList) => {
-    let index = recipes.findIndex(recipe => recipe.name === recipeInList.name);
-    recipeCardsSection.insertAdjacentHTML('beforeend', `
-      <article class="recipe-card" id="card${index}">
-        <div class="recipe-img" style="background-image: url(${recipeInList.image})">
-          <div class="heart-icon">
-            <img src="assets/heart-${recipeInList.favoritesStatus}.png" class="heart ${recipeInList.favoritesStatus}">
-          </div>
-          <div class="cook-icon">
-            <img src="assets/cookbook-${recipeInList.recipesToCookStatus}.png" class="cookbook ${recipeInList.recipesToCookStatus}">
-          </div>
-        </div>
-        <div class="recipe-name">
-          <h5 class="recipe-title">${recipeInList.name}</h5>
-        </div>
-      </article>
-    `)
-  });
-}
-
-function createRandomUser() {
-  let randomIndex = Math.floor(Math.random() * usersData.length);
-  user = new User(usersData[randomIndex].name, usersData[randomIndex].id, usersData[randomIndex].pantry);
-}
-
-function displayWelcomeH2(category = 'Recipes') {
-  welcomeHeading.innerText = `Welcome, ${user.name}! Browse Our ${category} Below.`;
-}
-
 function getRecipesInCategory(event, recipes) {
   let category = event.target.innerText;
   let recipesInCategory = recipes.filter(recipe => {
@@ -227,12 +233,6 @@ function displayOtherH2(pageTitle) {
 function displayListH2(pageTitle) {
   let listHeading = document.querySelector('.list-heading');
   listHeading.innerText = `${user.name}'s ${pageTitle}`;
-}
-
-function displaySingleRecipe(event) {
-  changeView(singleRecipeSection, homeSection, listSection);
-  const recipe = determineRecipeToDisplay(event);
-  displayRecipeDetails(recipe);
 }
 
 function changeView(activeView, viewToHide1, viewToHide2) {
