@@ -74,7 +74,7 @@ function clickAnalyzer(event) {
   } else if (event.target.closest('header')) {
     event.preventDefault();
     determineHeaderClick(event);
-  };
+  }
 }
 
 function determineHeaderClick(event) {
@@ -84,15 +84,15 @@ function determineHeaderClick(event) {
   if (event.target.classList.contains('app-title') || event.target.id === 'site-icon') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
     displayWelcomeH2();
-  };
+  }
   if (event.target.id === 'favorite-recipes') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.favoriteRecipes, 'Search saved recipes');
     displayOtherH2('Favorite Recipes');
-  };
+  }
   if (event.target.id === 'recipes-to-cook') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.recipesToCook, 'Search saved recipes');
     displayOtherH2('Recipes to Cook');
-  };
+  }
   if (event.target.id === 'pantry-menu') {
     displayListView(listSection, homeSection, singleRecipeSection, 'Pantry Items');
     createAndDisplayPantry();
@@ -101,14 +101,14 @@ function determineHeaderClick(event) {
     displayListView(listSection, homeSection, singleRecipeSection, 'Grocery List');
     createAndDisplayGroceryList();
     createAndDisplayGroceryCost();
-  };
+  }
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
     let savedRecipes = user.getSavedRecipes();
     displaySearchResults(savedRecipes, 'Saved Recipes Search Results')
-  };
+  }
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search recipes') {
     displaySearchResults(recipes, 'Search Results')
-  };
+  }
 }
 
 function showRecipeInFavorites(event, icon) {
@@ -142,7 +142,7 @@ function toggleRecipeIconDisplay(event, icon) {
     event.target.src = `assets/${icon}-inactive.png`;
     event.target.classList.remove('active');
     event.target.classList.add('inactive');
-  };
+  }
 }
 
 function determineRecipeToDisplay(event) {
@@ -169,7 +169,7 @@ function getRecipesFromSearch(recipesToSearch) {
   return recipesToSearch.filter(recipe => {
     if (recipe.name.toLowerCase().includes(userQuery) || recipe.ingredients.find(ingredient => getIngredientName(ingredient.id).includes(userQuery))) {
       return recipe;
-    };
+    }
   });
 }
 
@@ -179,7 +179,7 @@ function analyzeStateForCategory(event) {
   } else if (searchBar.placeholder === 'Search saved recipes') {
     let savedRecipes = user.getSavedRecipes();
     getRecipesInCategory(event, savedRecipes);
-  };
+  }
 }
 
 function getRecipesInCategory(event, recipes) {
@@ -228,7 +228,7 @@ function createAndDisplayPantry() {
 }
 
 function createPantryWithIngredientNames() {
-  return pantryWithIngredientsName = pantry.ingredients.map(ingredient => {
+  return pantry.ingredients.map(ingredient => {
     return ({ name: getIngredientName(ingredient.ingredient), amount: ingredient.amount });
   });
 }
@@ -284,7 +284,7 @@ function combineGroceryListDuplicates(ingredientsList) {
       uniqueIngredients[indexOfDuplicate].amount = totalAmount;
     } else {
       uniqueIngredients.push(neededIngredient);
-    };
+    }
     return uniqueIngredients;
   }, []);
 }
@@ -294,7 +294,7 @@ function getGroceryListCost(recipes) {
     let recipeCost = recipe.calculateIngredientsCost(ingredients);
     return totalCost + recipeCost; 
   }, 0);
-  let costInDollars = (costInCents/100).toFixed(2);
+  let costInDollars = (costInCents / 100).toFixed(2);
   return costInDollars;
 }
 
@@ -341,8 +341,4 @@ function displayGroceryListCost(cost) {
       <p class="cost-text">Total Estimated Cost: $${cost}</p>
     </div>
     `
-}
-
-if (typeof module !== 'undefined') {
-  module.exports = scripts;
 }
