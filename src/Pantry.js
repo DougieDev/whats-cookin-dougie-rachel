@@ -2,17 +2,16 @@ class Pantry {
   constructor(ingredients) {
     this.ingredients = ingredients || [];
   }
-
-  //is this function actually needed? Look into it later
-  checkForRecipeIngredients(recipe) {
-    return recipe.ingredients.every(recipeIngredient => {
-      if (this.checkIngredientStockInPantry(recipeIngredient) > 0) {
-        return false;
-      } else {
-        return true;
-      };
-    });
-  }
+    /* !It does not appear this method is being used any longer! */
+  // checkForRecipeIngredients = recipe => {
+  //   return recipe.ingredients.every(recipeIngredient => {
+  //     if (this.checkIngredientStockInPantry(recipeIngredient) > 0) {
+  //       return false;
+  //     } else {
+  //       return true;
+  //     };
+  //   });
+  // }
 
   checkIngredientStockInPantry(recipeIngredient) {
     let matchingIngredient = this.ingredients.find(pantryIngredient => pantryIngredient.ingredient === recipeIngredient.id);
@@ -30,7 +29,7 @@ class Pantry {
   listMissingIngredients(recipe) {
     return recipe.ingredients.reduce((missingIngredients, ingredient) => {
       let missingIngredientAmount = this.checkIngredientStockInPantry(ingredient);
-      if (missingIngredientAmount > 0) {
+      if (missingIngredientAmount > 0 ) {
         missingIngredients.push({ingredientId: ingredient.id, missingAmount: missingIngredientAmount});
       };
       return missingIngredients;
