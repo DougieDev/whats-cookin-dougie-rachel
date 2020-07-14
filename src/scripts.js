@@ -29,8 +29,12 @@ function clickAnalyzer(event) {
 
 //refactor below function when it's complete to group the functions it calls
 function determineHeaderClick(event) {
-  if (event.target.classList.contains('category')) {
-    getRecipesInCategory(event);
+  if (event.target.classList.contains('category') && searchBar.placeholder === 'Search recipes') {
+    getRecipesInCategory(event, recipes);
+  };
+  if (event.target.classList.contains('category') && searchBar.placeholder === 'Search saved recipes') {
+    let savedRecipes = user.getSavedRecipes();
+    getRecipesInCategory(event, savedRecipes);
   };
   if (event.target.classList.contains('app-title')) {
     changeView(homeSection, singleRecipeSection, listSection);
@@ -174,7 +178,7 @@ function displayWelcomeH2(category = 'Recipes') {
   welcomeHeading.innerText = `Welcome, ${user.name}! Browse Our ${category} Below.`;
 }
 
-function getRecipesInCategory(event) {
+function getRecipesInCategory(event, recipes) {
   let category = event.target.innerText;
   let recipesInCategory = recipes.filter(recipe => {
     let categoryTags = recipe.mapCategoryToTag(category);
