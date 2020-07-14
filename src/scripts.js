@@ -44,12 +44,12 @@ function displayRecipes(recipesList) {
     let index = recipes.findIndex(recipe => recipe.name === recipeInList.name);
     recipeCardsSection.insertAdjacentHTML('beforeend', `
       <article class="recipe-card" id="card${index}">
-        <div class="recipe-img" style="background-image: url(${recipeInList.image})">
+        <div class="recipe-img" style="background-image: url(${recipeInList.image})" title="${recipeInList.name}">
           <div class="heart-icon">
-            <img src="assets/heart-${recipeInList.favoritesStatus}.png" class="heart ${recipeInList.favoritesStatus}">
+            <img src="assets/heart-${recipeInList.favoritesStatus}.png" alt="like button" class="heart ${recipeInList.favoritesStatus}">
           </div>
           <div class="cook-icon">
-            <img src="assets/cookbook-${recipeInList.recipesToCookStatus}.png" class="cookbook ${recipeInList.recipesToCookStatus}">
+            <img src="assets/cookbook-${recipeInList.recipesToCookStatus}.png" alt="add to recipes cookbook button" class="cookbook ${recipeInList.recipesToCookStatus}">
           </div>
         </div>
         <div class="recipe-name">
