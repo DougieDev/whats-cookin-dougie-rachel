@@ -14,17 +14,25 @@ pageBody.addEventListener('click', clickAnalyzer);
 
 function clickAnalyzer(event) {
   if (event.target.classList.contains('heart')) {
-    toggleRecipeToUserFavorites(event);
-    toggleRecipeIconDisplay(event, 'heart');
+    showRecipeInFavorites(event, 'heart');
   } else if (event.target.classList.contains('cookbook')) {
-    toggleRecipeToRecipesToCook(event)
-    toggleRecipeIconDisplay(event, 'cookbook');
+    showRecipeInToCook(event, 'cookbook');
   } else if (event.target.closest('.recipe-card')) {
     displaySingleRecipe(event);
   } else if (event.target.closest('header')) {
     event.preventDefault();
     determineHeaderClick(event);
   };
+}
+
+function showRecipeInFavorites(event, icon) {
+  toggleRecipeToUserFavorites(event);
+  toggleRecipeIconDisplay(event, icon);
+}
+
+function showRecipeInToCook(event, icon) {
+  toggleRecipeToRecipesToCook(event);
+  toggleRecipeIconDisplay(event, icon);
 }
 
 //refactor below function when it's complete to group the functions it calls
