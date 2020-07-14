@@ -93,7 +93,6 @@ function displaySingleRecipe(event) {
   displayRecipeDetails(recipe);
 }
 
-//refactor below function when it's complete to group the functions it calls
 function determineHeaderClick(event) {
   if (event.target.classList.contains('category')) {
     analyzeStateForCategory(event); 
@@ -101,37 +100,23 @@ function determineHeaderClick(event) {
   if (event.target.classList.contains('app-title') || event.target.id === 'site-icon') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
     displayWelcomeH2(); 
-    // changeView(homeSection, singleRecipeSection, listSection);
-    // displayRecipes(recipes);
-    // changeSearchBarText('Search recipes');
   };
   if (event.target.id === 'favorite-recipes') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.favoriteRecipes, 'Search saved recipes');
     displayOtherH2('Favorite Recipes');
-    // changeView(homeSection, singleRecipeSection, listSection);
-    // displayRecipes(user.favoriteRecipes);
-    // changeSearchBarText('Search saved recipes');
   };
   if (event.target.id === 'recipes-to-cook') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.recipesToCook, 'Search saved recipes');
     displayOtherH2('Recipes to Cook');
-    // changeView(homeSection, singleRecipeSection, listSection);
-    // displayRecipes(user.recipesToCook);
-    // changeSearchBarText('Search saved recipes');
   };
   if (event.target.id === 'pantry-menu') {
-    changeView(listSection, homeSection, singleRecipeSection);
-    displayListH2('Pantry Items');
-    let pantryIngredientsList = createPantryWithIngredientNames();
-    displayListItems(pantryIngredientsList);
+    displayListView(listSection, homeSection, singleRecipeSection, 'Pantry Items');
+    createAndDisplayPantry();
   }
   if (event.target.id === 'grocery-list-menu') {
-    changeView(listSection, homeSection, singleRecipeSection);
-    displayListH2('Grocery List');
-    let groceryList = createGroceryList(user.recipesToCook);
-    displayListItems(groceryList);
-    let cost = getGroceryListCost(user.recipesToCook);
-    displayGroceryListCost(cost);
+    displayListView(listSection, homeSection, singleRecipeSection, 'Grocery List');
+    createAndDisplayGroceryList();
+    createAndDisplayGroceryCost();
   };
   if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
     let savedRecipes = user.getSavedRecipes();
@@ -154,9 +139,18 @@ function analyzeStateForCategory(event) {
     getRecipesInCategory(event, savedRecipes);
   };
 }
-///
 
-function displayAppropriateRecipesInView(activeView, hiddenView1, hiddenView2, recipes, text) {
+function getRecipesInCategory(event, recipes) {
+  let category = event.target.innerText;
+  let recipesInCategory = recipes.filter(recipe => {
+    let categoryTags = recipe.mapCategoryToTag(category);
+    return recipe.checkRecipeCategory(categoryTags);
+  });
+  displayWelcomeH2(category);
+  displayRecipes(recipesInCategory);
+}
+
+function displayAppropriateRecipesInView(activeView, viewToHide1, viewToHide2, recipes, text) {
   changeView(homeSection, singleRecipeSection, listSection);
   displayRecipes(recipes);
   changeSearchBarText('Search recipes');
@@ -172,14 +166,52 @@ function changeSearchBarText(text) {
   searchBar.placeholder = text;
 }
 
-function getRecipesInCategory(event, recipes) {
-  let category = event.target.innerText;
-  let recipesInCategory = recipes.filter(recipe => {
-    let categoryTags = recipe.mapCategoryToTag(category);
-    return recipe.checkRecipeCategory(categoryTags);
+function displayOtherH2(pageTitle) {
+  welcomeHeading.innerText = `${user.name}'s ${pageTitle}`;
+}
+
+function displayListView(activeView, viewToHide1, viewToHide2, title) {
+  changeView(activeView, viewToHide1, viewToHide2);
+  displayListH2(title);
+}
+
+function displayListH2(pageTitle) {
+  let listHeading = document.querySelector('.list-heading');
+  listHeading.innerText = `${user.name}'s ${pageTitle}`;
+}
+
+function createAndDisplayPantry() {
+  let pantryIngredientsList = createPantryWithIngredientNames();
+  displayListItems(pantryIngredientsList);
+}
+
+function createPantryWithIngredientNames() {
+  return pantryWithIngredientsName = pantry.ingredients.map(ingredient => {
+    return ({ name: getIngredientName(ingredient.ingredient), amount: ingredient.amount });
   });
-  displayWelcomeH2(category);
-  displayRecipes(recipesInCategory);
+}
+
+function getIngredientName(ingredientId) {
+  const ingredient = ingredientsData.find(ingredient => ingredient.id === ingredientId);
+  return ingredient.name;
+}
+
+function displayListItems(list) {
+  let bulletPoints = list.reduce((listDisplayBullets, listItem) => {
+    listDisplayBullets += `<li>${listItem.amount} ${listItem.name}</li>`;
+    return listDisplayBullets;
+  }, '');
+  itemsList.innerHTML = bulletPoints;
+}
+
+function createAndDisplayGroceryList() {
+  let groceryList = createGroceryList(user.recipesToCook);
+  displayListItems(groceryList);
+}
+
+function createAndDisplayGroceryCost() {
+  let cost = getGroceryListCost(user.recipesToCook);
+  displayGroceryListCost(cost);
 }
 
 
@@ -249,17 +281,6 @@ function toggleRecipeIconDisplay(event, icon) {
   };
 }
 
-function displayOtherH2(pageTitle) {
-  welcomeHeading.innerText = `${user.name}'s ${pageTitle}`;
-}
-
-function displayListH2(pageTitle) {
-  let listHeading = document.querySelector('.list-heading');
-  listHeading.innerText = `${user.name}'s ${pageTitle}`;
-}
-
-
-
 function determineRecipeToDisplay(event) {
   let recipeCardId = event.target.closest('.recipe-card').id;
   let recipeCardIndex = recipeCardId.slice(4);
@@ -304,11 +325,6 @@ function createInstructionsList(recipe) {
   }, '');
 }
 
-function getIngredientName(ingredientId) {
-  const ingredient = ingredientsData.find(ingredient => ingredient.id === ingredientId);
-  return ingredient.name;
-}
-
 function getRecipesFromSearch(recipesToSearch) {
   let userQuery = searchBar.value.toLowerCase();
   return recipesToSearch.filter(recipe => {
@@ -316,20 +332,6 @@ function getRecipesFromSearch(recipesToSearch) {
       return recipe;
     };
   });
-}
-
-function createPantryWithIngredientNames() {
-  return pantryWithIngredientsName = pantry.ingredients.map(ingredient => {
-    return ({name: getIngredientName(ingredient.ingredient), amount: ingredient.amount});
-  });
-}
-
-function displayListItems(list) {
-  let bulletPoints = list.reduce((listDisplayBullets, listItem) => {
-    listDisplayBullets += `<li>${listItem.amount} ${listItem.name}</li>`;
-    return listDisplayBullets;
-  }, '');
-  itemsList.innerHTML = bulletPoints;
 }
 
 function displayGroceryListCost(cost) {
