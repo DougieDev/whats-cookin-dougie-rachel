@@ -48,6 +48,7 @@ nav {
   background-color: #CAFFBF;
   font-size: 16px;
   width: 100%;
+  z-index: 1;
 }
 
 .dropdown-content a {
