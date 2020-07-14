@@ -110,7 +110,13 @@ function combineGroceryListDuplicates(ingredientsList) {
   }, []);
 }
 
-  //also need to get cost of those ingredients & display total estimated cost (for each recipe, recipe.calculateIngredientsCost(ingredients), then sum costs together)
+function getGroceryListCost(recipes) {
+  let costInCents = recipes.reduce((totalCost, recipe) => {
+    let recipeCost = recipe.calculateIngredientsCost(ingredients);
+    return totalCost + recipeCost; 
+  }, 0);
+  let costInDollars = (costInCents/100).toFixed(2);
+}
 
 function setUpHomePage() {
   recipes = instantiateRecipes(recipeData);
