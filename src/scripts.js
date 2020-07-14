@@ -6,7 +6,7 @@ const listSection = document.querySelector('.list-view');
 let itemsList = document.querySelector('.list-items');
 const welcomeHeading = document.querySelector('.welcome-heading');
 const searchBar = document.querySelector('.search-bar');
-let recipes, user, ingredients;
+let recipes, user, ingredients, pantry;
 
 window.onload = setUpHomePage;
 
@@ -88,7 +88,7 @@ function createGroceryList(recipes) {
 
 function createInitialIngredientsList(recipes) {
   return recipes.reduce((totalMissingIngredientsList, recipe) => {
-    let missingIngredients = user.pantry.listMissingIngredients(recipe);
+    let missingIngredients = pantry.listMissingIngredients(recipe);
     totalMissingIngredientsList = totalMissingIngredientsList.concat(missingIngredients);
     return totalMissingIngredientsList;
   }, []); 
@@ -127,6 +127,7 @@ function setUpHomePage() {
   ingredients = instantiateIngredients(ingredientsData);
   displayRecipes(recipes);
   createRandomUser();
+  instantiatePantry(user);
   displayWelcomeH2();
 }
 
@@ -136,6 +137,10 @@ function instantiateRecipes(recipeData) {
 
 function instantiateIngredients(ingredientsData) {
   return ingredientsData.map(ingredient => new Ingredient(ingredient));
+}
+
+function instantiatePantry(user) {
+  pantry = new Pantry(user.pantry); 
 }
 
 function displayRecipes(recipesList) {
@@ -283,13 +288,12 @@ function getRecipesFromSearch(recipesToSearch) {
 }
 
 function createPantryWithIngredientNames() {
-  return pantryWithIngredientsName = user.pantry.map(ingredient => {
+  return pantryWithIngredientsName = pantry.ingredients.map(ingredient => {
     return ({name: getIngredientName(ingredient.ingredient), amount: ingredient.amount});
   });
 }
 
 function displayListItems(list) {
-  // itemsList.innerHTML = '';
   let bulletPoints = list.reduce((listDisplayBullets, listItem) => {
     listDisplayBullets += `<li>${listItem.amount} ${listItem.name}</li>`;
     return listDisplayBullets;
