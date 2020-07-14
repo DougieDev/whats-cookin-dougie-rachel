@@ -127,7 +127,6 @@ describe('Pantry', function() {
     const missingIngredients = pantry.listMissingIngredients(recipe);
     
     const result = [
-      {ingredientId: 1, missingAmount: 0},
       {ingredientId: 2, missingAmount: 1},
       {ingredientId: 3, missingAmount: 3}
     ];
