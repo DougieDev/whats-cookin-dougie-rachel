@@ -95,29 +95,29 @@ function displaySingleRecipe(event) {
 
 //refactor below function when it's complete to group the functions it calls
 function determineHeaderClick(event) {
-  if (event.target.classList.contains('category') && searchBar.placeholder === 'Search recipes') {
-    getRecipesInCategory(event, recipes);
-  };
-  if (event.target.classList.contains('category') && searchBar.placeholder === 'Search saved recipes') {
-    let savedRecipes = user.getSavedRecipes();
-    getRecipesInCategory(event, savedRecipes);
-  };
-  if (event.target.classList.contains('app-title')) {
-    changeView(homeSection, singleRecipeSection, listSection);
-    displayRecipes(recipes);
-    changeSearchBarText('Search recipes');
+  if (event.target.classList.contains('category')) {
+    analyzeStateForCategory(event); 
+  }
+  if (event.target.classList.contains('app-title') || event.target.id === 'site-icon') {
+    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
+    displayWelcomeH2(); 
+    // changeView(homeSection, singleRecipeSection, listSection);
+    // displayRecipes(recipes);
+    // changeSearchBarText('Search recipes');
   };
   if (event.target.id === 'favorite-recipes') {
-    changeView(homeSection, singleRecipeSection, listSection);
+    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.favoriteRecipes, 'Search saved recipes');
     displayOtherH2('Favorite Recipes');
-    displayRecipes(user.favoriteRecipes);
-    changeSearchBarText('Search saved recipes');
+    // changeView(homeSection, singleRecipeSection, listSection);
+    // displayRecipes(user.favoriteRecipes);
+    // changeSearchBarText('Search saved recipes');
   };
   if (event.target.id === 'recipes-to-cook') {
-    changeView(homeSection, singleRecipeSection, listSection);
+    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.recipesToCook, 'Search saved recipes');
     displayOtherH2('Recipes to Cook');
-    displayRecipes(user.recipesToCook);
-    changeSearchBarText('Search saved recipes');
+    // changeView(homeSection, singleRecipeSection, listSection);
+    // displayRecipes(user.recipesToCook);
+    // changeSearchBarText('Search saved recipes');
   };
   if (event.target.id === 'pantry-menu') {
     changeView(listSection, homeSection, singleRecipeSection);
@@ -146,9 +146,42 @@ function determineHeaderClick(event) {
   };
 }
 
+function analyzeStateForCategory(event) {
+  if (searchBar.placeholder === 'Search recipes') {
+    getRecipesInCategory(event, recipes);
+  } else if (searchBar.placeholder === 'Search saved recipes') {
+    let savedRecipes = user.getSavedRecipes();
+    getRecipesInCategory(event, savedRecipes);
+  };
+}
+///
+
+function displayAppropriateRecipesInView(activeView, hiddenView1, hiddenView2, recipes, text) {
+  changeView(homeSection, singleRecipeSection, listSection);
+  displayRecipes(recipes);
+  changeSearchBarText('Search recipes');
+}
+
+function changeView(activeView, viewToHide1, viewToHide2) {
+  activeView.classList.remove('hidden');
+  viewToHide1.classList.add('hidden');
+  viewToHide2.classList.add('hidden');
+}
+
 function changeSearchBarText(text) {
   searchBar.placeholder = text;
 }
+
+function getRecipesInCategory(event, recipes) {
+  let category = event.target.innerText;
+  let recipesInCategory = recipes.filter(recipe => {
+    let categoryTags = recipe.mapCategoryToTag(category);
+    return recipe.checkRecipeCategory(categoryTags);
+  });
+  displayWelcomeH2(category);
+  displayRecipes(recipesInCategory);
+}
+
 
 function createGroceryList(recipes) {
   let ingredientsList = createInitialIngredientsList(recipes);
@@ -192,16 +225,6 @@ function getGroceryListCost(recipes) {
   return costInDollars;
 }
 
-function getRecipesInCategory(event, recipes) {
-  let category = event.target.innerText;
-  let recipesInCategory = recipes.filter(recipe => {
-    let categoryTags = recipe.mapCategoryToTag(category);
-    return recipe.checkRecipeCategory(categoryTags);
-  });
-  displayWelcomeH2(category);
-  displayRecipes(recipesInCategory);
-}
-
 function toggleRecipeToUserFavorites(event) {
   let recipe = determineRecipeToDisplay(event);
   user.toggleFavoriteRecipe(recipe);
@@ -235,11 +258,7 @@ function displayListH2(pageTitle) {
   listHeading.innerText = `${user.name}'s ${pageTitle}`;
 }
 
-function changeView(activeView, viewToHide1, viewToHide2) {
-  activeView.classList.remove('hidden');
-  viewToHide1.classList.add('hidden');
-  viewToHide2.classList.add('hidden');
-}
+
 
 function determineRecipeToDisplay(event) {
   let recipeCardId = event.target.closest('.recipe-card').id;
