@@ -311,7 +311,7 @@ function displayRecipeDetails(recipe) {
         <ul>${recipeIngredientsList}</ul>
       </div>
       <div class="image-box">
-        <img src=${recipe.image}>
+        <img src=${recipe.image} alt="${recipe.name}">
       </div>
     </section>
     <section class="recipe-instructions">
