@@ -328,8 +328,6 @@ function createIngredientsList(recipe) {
   }, '');
 }
 
-// Math.round(num * 100) / 100
-
 function createInstructionsList(recipe) {
   return recipe.instructions.reduce((instructionsList, instruction) => {
     instructionsList += `<li>${instruction.instruction}</li>`;
