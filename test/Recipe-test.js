@@ -4,7 +4,7 @@ const expect = chai.expect;
 const Recipe = require('../src/Recipe');
 
 describe('Recipe', function() {
-  let id, image, ingredient1, ingredient2, ingredients, instruction1, instruction2, instructions, name, tags, recipe;
+  let id, image, ingredient1, ingredient2, ingredients, instruction1, instruction2, instructions, name, tags, recipe, blankRecipe;
   before(function() {
     id = 1
     image = 'https://en.wikipedia.org/wiki/Smiley#/media/File:SNice.svg';
@@ -29,6 +29,7 @@ describe('Recipe', function() {
     name = 'Funfetti Cookies';
     tags = ['dessert', 'breakfast'];
     recipe = new Recipe(id, image, ingredients, instructions, name, tags);
+    blankRecipe = new Recipe(); 
   });
   it('should be a function', function() {
     expect(Recipe).to.be.a('function');
@@ -42,47 +43,58 @@ describe('Recipe', function() {
     expect(recipe.id).to.equal(id);
   });
 
-//Add sad path test for if non-number is passed in as id
-//should function return 'Please enter a valid id'?
-//same for all other properties
+  it('should have a default id if no id is passed in', function() {
+    expect(blankRecipe.id).to.equal(0)
+  })
 
   it('should have an image', function() {
     expect(recipe.image).to.equal(image);
+  });
+
+  it('should have a default image if no image is passed in', function() {
+
+    const defaultImg = 'https://cdn.pixabay.com/photo/2017/07/28/13/29/spices-2548653_960_720.jpg';
+    
+    expect(blankRecipe.image).to.equal(defaultImg);
   });
 
   it('should have ingredients', function() {
     expect(recipe.ingredients).to.deep.equal(ingredients);
   });
 
+  it('should have an empty array of ingredients if none are passed in', function () {
+    expect(blankRecipe.ingredients).to.deep.equal([]);
+  });
+
   it('should have instructions', function() {
     expect(recipe.instructions).to.deep.equal(instructions)
+  });
+
+  it('should have an empty array of instructions if none are passed in', function () {
+    expect(blankRecipe.instructions).to.deep.equal([])
   });
 
   it('should have a name', function() {
     expect(recipe.name).to.equal(name);
   });
 
+  it('should have an empty string as a name if none is passed in', function () {
+    expect(blankRecipe.name).to.equal('');
+  });
+
   it('should have category tags', function() {
     expect(recipe.tags).to.deep.equal(tags);
   });
 
-  it('should contain a key that maps categories to their corresponding tags', function() {
-    const categoryToTagMap = {
-      Appetizers: ['antipasti', 'starter', 'snack', 'appetizer', 'antipasto', 'hor d\'oeuvre'],
-      Entrees: ['lunch', 'main course', 'main dish', 'dinner'],
-      'Sauces & Dips': ['sauce', 'condiment', 'dip', 'spread'],
-      'Side Dishes': ['side dish'],
-      Breakfast: ['morning meal', 'brunch', 'breakfast'],
-      Salads: ['salad'],
-      Other: ['other']
-    }
-    expect(recipe.categoryToTagMap.Appetizers).to.deep.equal(['antipasti', 'starter', 'snack', 'appetizer', 'antipasto', 'hor d\'oeuvre'])
-  });
-
-  it('should default to a tag of other if no tag is passed in', function() {
+  it('should default to a tag of other if no tag is passed in', function () {
     const recipe2 = new Recipe(id, image, ingredients, instructions, name);
 
     expect(recipe2.tags).to.deep.equal(['other']);
+  });
+
+  it('should contain a key that maps categories to their corresponding tags', function() {
+
+    expect(recipe.categoryToTagMap.Appetizers).to.deep.equal(['antipasti', 'starter', 'snack', 'appetizer', 'antipasto', 'hor d\'oeuvre'])
   });
 
   it('should default to a tag of other if an empty tag array is passed in', function () {
