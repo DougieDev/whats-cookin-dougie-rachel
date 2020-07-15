@@ -23,7 +23,6 @@ class Recipe {
     this.recipesToCookStatus = 'inactive';
   }
 
-  //when filtering recipes by category, need to call 2 methods below together (return value from mapCategoryToTag (tags array) gets passed into checkRecipeCategory)
   mapCategoryToTag(category) {
     return this.categoryToTagMap[category];
   }
@@ -32,11 +31,6 @@ class Recipe {
     return this.tags.some(tag => categoryTags.includes(tag));
   }
 
-  /* !It does not appear this method is being used any longer! */
-  // checkRecipeIngredients(ingredientSearchedId) {
-  //   return this.ingredients.some(ingredient => ingredient.id === ingredientSearchedId);
-  // }
-
   calculateIngredientsCost(ingredientsData) {
     return this.ingredients.reduce((totalIngredientsCost, ingredient) => {
       let matchingIngredient = ingredientsData.find(ingredientCost => ingredientCost.id === ingredient.id) || {estimatedCostInCents: 100};
@@ -44,11 +38,6 @@ class Recipe {
       return totalIngredientsCost + ingredientCost;
     }, 0);
   }
-
-/* !It does not appear this method is being used any longer! */
-  // retrieveRecipeInstructions() {
-  //   return this.instructions;
-  // }
 
   toggleFavoritesStatus() {
     if (this.favoritesStatus === 'inactive') {

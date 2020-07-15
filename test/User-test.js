@@ -185,15 +185,4 @@ describe('User', function() {
 
     expect(savedRecipes).to.deep.equal([recipe1, recipe2]);
   });
-
-  /* !This test is no longer relevant to its class! */
-  // it('should be able to filter recipes by category tag', function() {
-  //   user1.toggleFavoriteRecipe(recipe1);
-  //   user1.toggleRecipeToCook(recipe2);
-  //   user1.filterRecipeByTag("dessert");
-  //
-  //   let filteredRecipes = user1.filterRecipeByTag("dessert");
-  //
-  //   expect(filteredRecipes).to.deep.equal([recipe1]);
-  // })
 });

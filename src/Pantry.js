@@ -2,16 +2,6 @@ class Pantry {
   constructor(ingredients) {
     this.ingredients = ingredients || [];
   }
-    /* !It does not appear this method is being used any longer! */
-  // checkForRecipeIngredients = recipe => {
-  //   return recipe.ingredients.every(recipeIngredient => {
-  //     if (this.checkIngredientStockInPantry(recipeIngredient) > 0) {
-  //       return false;
-  //     } else {
-  //       return true;
-  //     };
-  //   });
-  // }
 
   checkIngredientStockInPantry(recipeIngredient) {
     let matchingIngredient = this.ingredients.find(pantryIngredient => pantryIngredient.ingredient === recipeIngredient.id);

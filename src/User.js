@@ -29,13 +29,6 @@ class User {
   getSavedRecipes() {
     return this.favoriteRecipes.concat(this.recipesToCook);
   }
-/* !It does not appear this method is being used any longer! */
-  // filterRecipeByTag(tag) {
-  //   let savedRecipes = this.getSavedRecipes();
-  //   return savedRecipes.filter(recipe => {
-  //     return recipe.tags.includes(tag);
-  //   });
-  // }
 }
 
 if (typeof module !== 'undefined') {
