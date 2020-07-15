@@ -20,54 +20,6 @@ navFilterDropdown.addEventListener('click', analyzeStateForCategory);
 navRecipeBoxDropdown.addEventListener('click', checkNavItem);
 searchBar.addEventListener('keyup', executeSearch);
 
-function mainClickAnalyzer(event) {
-  if (event.target.classList.contains('heart')) {
-    showRecipeInFavorites(event, 'heart');
-  } else if (event.target.classList.contains('cookbook')) {
-    showRecipeInToCook(event, 'cookbook');
-  } else if (event.target.closest('.recipe-card')) {
-    displaySingleRecipe(event);
-  }
-}
-
-function checkNavItem(event) {
-  event.preventDefault(); 
-  if (event.target.id === 'favorite-recipes') {
-    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.favoriteRecipes, 'Search saved recipes');
-    displayOtherH2('Favorite Recipes');
-  }
-  if (event.target.id === 'recipes-to-cook') {
-    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.recipesToCook, 'Search saved recipes');
-    displayOtherH2('Recipes to Cook');
-  }
-  if (event.target.id === 'pantry-menu') {
-    displayListView(listSection, homeSection, singleRecipeSection, 'Pantry Items');
-    createAndDisplayPantry();
-  }
-  if (event.target.id === 'grocery-list-menu') {
-    displayListView(listSection, homeSection, singleRecipeSection, 'Grocery List');
-    createAndDisplayGroceryList();
-    createAndDisplayGroceryCost();
-  }
-}
-
-function executeSearch(event) {
-  if (searchBar.placeholder === 'Search recipes') {
-    displaySearchResults(recipes, `${searchBar.value} Search Results`)
-  } else {
-    let savedRecipes = user.getSavedRecipes();
-    displaySearchResults(savedRecipes, `Saved Recipes ${searchBar.value} Search Results`)
-  }
-  if (event.key === 'Enter') {
-    searchBar.value = '';
-  }
-}
-
-function goBackToHome() {
-  displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
-  displayWelcomeH2();
-}
-
 function setUpHomePage() {
   recipes = instantiateRecipes(recipeData);
   ingredients = instantiateIngredients(ingredientsData);
@@ -118,6 +70,64 @@ function displayRecipes(recipesList) {
 
 function displayWelcomeH2(category = 'Recipes') {
   welcomeHeading.innerText = `Welcome, ${user.name}! Browse Our ${category} Below.`;
+}
+
+function mainClickAnalyzer(event) {
+  if (event.target.classList.contains('heart')) {
+    showRecipeInFavorites(event, 'heart');
+  } else if (event.target.classList.contains('cookbook')) {
+    showRecipeInToCook(event, 'cookbook');
+  } else if (event.target.closest('.recipe-card')) {
+    displaySingleRecipe(event);
+  }
+}
+
+function goBackToHome() {
+  displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
+  displayWelcomeH2();
+}
+
+function analyzeStateForCategory(event) {
+  event.preventDefault();
+  if (searchBar.placeholder === 'Search recipes') {
+    getRecipesInCategory(event, recipes);
+  } else if (searchBar.placeholder === 'Search saved recipes') {
+    let savedRecipes = user.getSavedRecipes();
+    getRecipesInCategory(event, savedRecipes);
+  }
+}
+
+function checkNavItem(event) {
+  event.preventDefault();
+  if (event.target.id === 'favorite-recipes') {
+    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.favoriteRecipes, 'Search saved recipes');
+    displayOtherH2('Favorite Recipes');
+  }
+  if (event.target.id === 'recipes-to-cook') {
+    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.recipesToCook, 'Search saved recipes');
+    displayOtherH2('Recipes to Cook');
+  }
+  if (event.target.id === 'pantry-menu') {
+    displayListView(listSection, homeSection, singleRecipeSection, 'Pantry Items');
+    createAndDisplayPantry();
+  }
+  if (event.target.id === 'grocery-list-menu') {
+    displayListView(listSection, homeSection, singleRecipeSection, 'Grocery List');
+    createAndDisplayGroceryList();
+    createAndDisplayGroceryCost();
+  }
+}
+
+function executeSearch(event) {
+  if (searchBar.placeholder === 'Search recipes') {
+    displaySearchResults(recipes, `${searchBar.value} Search Results`)
+  } else {
+    let savedRecipes = user.getSavedRecipes();
+    displaySearchResults(savedRecipes, `Saved Recipes ${searchBar.value} Search Results`)
+  }
+  if (event.key === 'Enter') {
+    searchBar.value = '';
+  }
 }
 
 function showRecipeInFavorites(event, icon) {
@@ -180,16 +190,6 @@ function getRecipesFromSearch(recipesToSearch) {
       return recipe;
     }
   });
-}
-
-function analyzeStateForCategory(event) {
-  event.preventDefault();
-  if (searchBar.placeholder === 'Search recipes') {
-    getRecipesInCategory(event, recipes);
-  } else if (searchBar.placeholder === 'Search saved recipes') {
-    let savedRecipes = user.getSavedRecipes();
-    getRecipesInCategory(event, savedRecipes);
-  }
 }
 
 function getRecipesInCategory(event, recipes) {
