@@ -323,10 +323,12 @@ function displayRecipeDetails(recipe) {
 
 function createIngredientsList(recipe) {
   return recipe.ingredients.reduce((ingredientsList, ingredient) => {
-    ingredientsList += `<li>${ingredient.quantity.amount} ${ingredient.quantity.unit} ${getIngredientName(ingredient.id)}</li>`;
+    ingredientsList += `<li>${Math.round(ingredient.quantity.amount * 100) / 100} ${ingredient.quantity.unit} ${getIngredientName(ingredient.id)}</li>`;
     return ingredientsList;
   }, '');
 }
+
+// Math.round(num * 100) / 100
 
 function createInstructionsList(recipe) {
   return recipe.instructions.reduce((instructionsList, instruction) => {
