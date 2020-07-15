@@ -1,11 +1,8 @@
 const recipeCardsSection = document.querySelector('.recipe-cards')
-// const pageBody = document.querySelector('body');
 const mainSection = document.querySelector('main');
 const h1Logo = document.querySelector('.h1-logo');
 const navFilterDropdown = document.querySelector('.nav-filter');
 const navRecipeBoxDropdown = document.querySelector('.nav-recipe-box');
-const searchButton = document.querySelector('.search-button');
-//
 const searchBar = document.querySelector('.search-bar');
 const homeSection = document.querySelector('.home-view');
 const singleRecipeSection = document.querySelector('.single-recipe-view');
@@ -21,7 +18,7 @@ mainSection.addEventListener('click', mainClickAnalyzer);
 h1Logo.addEventListener('click', goBackToHome);
 navFilterDropdown.addEventListener('click', analyzeStateForCategory);
 navRecipeBoxDropdown.addEventListener('click', checkNavItem);
-searchButton.addEventListener('click', executeSearch);
+searchBar.addEventListener('keyup', executeSearch);
 
 function mainClickAnalyzer(event) {
   if (event.target.classList.contains('heart')) {
@@ -54,13 +51,15 @@ function checkNavItem(event) {
   }
 }
 
-function executeSearch() {
-  event.preventDefault(); 
+function executeSearch(event) {
   if (searchBar.placeholder === 'Search recipes') {
-    displaySearchResults(recipes, 'Search Results')
+    displaySearchResults(recipes, `${searchBar.value} Search Results`)
   } else {
     let savedRecipes = user.getSavedRecipes();
-    displaySearchResults(savedRecipes, 'Saved Recipes Search Results')
+    displaySearchResults(savedRecipes, `Saved Recipes ${searchBar.value} Search Results`)
+  }
+  if (event.key === 'Enter') {
+    searchBar.value = '';
   }
 }
 
