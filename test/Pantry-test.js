@@ -27,7 +27,7 @@ describe('Pantry', function() {
   });
 
   it('should be empty if no ingredients are passed in', function() {
-    pantry2 = new Pantry(); 
+    pantry2 = new Pantry();
 
     expect(pantry2.ingredients).to.deep.equal([]);
   });
@@ -54,12 +54,12 @@ describe('Pantry', function() {
         unit: "cans"
       }
     };
- 
+
     const missingIngredientStock = pantry.checkIngredientStockInPantry(ingredient);
 
     expect(missingIngredientStock).to.equal(2);
   });
-  
+
   it('should be able to calculate there is enough of a recipe ingredient in the the pantry', function () {
     const ingredient = {
       id: 1,
@@ -74,29 +74,30 @@ describe('Pantry', function() {
     expect(missingIngredientStock).to.equal(0);
   });
 
+  /* !This test is no longer relevant to its class! */
 
-  it('should be able to check if it has the ingredients needed to make a recipe', function() {
-    const recipeIngredient1 = {
-      id: 1,
-      quantity: {
-        amount: 2,
-        unit: "cans"
-      }
-    };
-    const recipeIngredient2 = {
-      id: 2,
-      quantity: {
-        amount: 3,
-        unit: "cans"
-      }
-    };
-    const instruction1 = { instruction: 'Buy store-bought cookies.', number: 1 };
-    const instruction2 = { instruction: 'Say you made them from scratch.', number: 2 };
-    const recipe = new Recipe(1, 'https://pxhere.com/en/photo/1575227', [recipeIngredient1, recipeIngredient2], [instruction1, instruction2], 'cookies', ['dessert']);
-    const pantryStocked = pantry.checkForRecipeIngredients(recipe);
-
-    expect(pantryStocked).to.equal(true);
-  });
+  // it('should be able to check if it has the ingredients needed to make a recipe', function() {
+  //   const recipeIngredient1 = {
+  //     id: 1,
+  //     quantity: {
+  //       amount: 2,
+  //       unit: "cans"
+  //     }
+  //   };
+  //   const recipeIngredient2 = {
+  //     id: 2,
+  //     quantity: {
+  //       amount: 3,
+  //       unit: "cans"
+  //     }
+  //   };
+  //   const instruction1 = { instruction: 'Buy store-bought cookies.', number: 1 };
+  //   const instruction2 = { instruction: 'Say you made them from scratch.', number: 2 };
+  //   const recipe = new Recipe(1, 'https://pxhere.com/en/photo/1575227', [recipeIngredient1, recipeIngredient2], [instruction1, instruction2], 'cookies', ['dessert']);
+  //   const pantryStocked = pantry.checkForRecipeIngredients(recipe);
+  //
+  //   expect(pantryStocked).to.equal(true);
+  // });
 
   it('should be able to determine how much of each recipe ingredient is missing from the pantry', function() {
     const recipeIngredient1 = {
@@ -122,10 +123,13 @@ describe('Pantry', function() {
     };
     const instruction1 = { instruction: 'Buy store-bought cookies.', number: 1 };
     const instruction2 = { instruction: 'Say you made them from scratch.', number: 2 };
-    const recipe = new Recipe(1, 'https://pxhere.com/en/photo/1575227', [recipeIngredient1, recipeIngredient2, recipeIngredient3], [instruction1, instruction2], 'cookies', ['dessert']); 
+    const recipe = new Recipe(1,
+      'https://pxhere.com/en/photo/1575227',
+      [recipeIngredient1, recipeIngredient2, recipeIngredient3],
+      [instruction1, instruction2], 'cookies', ['dessert']);
 
     const missingIngredients = pantry.listMissingIngredients(recipe);
-    
+
     const result = [
       {ingredientId: 2, missingAmount: 1},
       {ingredientId: 3, missingAmount: 3}

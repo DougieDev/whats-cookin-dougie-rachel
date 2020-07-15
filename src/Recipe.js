@@ -32,9 +32,10 @@ class Recipe {
     return this.tags.some(tag => categoryTags.includes(tag));
   }
 
-  checkRecipeIngredients(ingredientSearchedId) {
-    return this.ingredients.some(ingredient => ingredient.id === ingredientSearchedId);
-  }
+  /* !It does not appear this method is being used any longer! */
+  // checkRecipeIngredients(ingredientSearchedId) {
+  //   return this.ingredients.some(ingredient => ingredient.id === ingredientSearchedId);
+  // }
 
   calculateIngredientsCost(ingredientsData) {
     return this.ingredients.reduce((totalIngredientsCost, ingredient) => {
@@ -44,9 +45,10 @@ class Recipe {
     }, 0);
   }
 
-  retrieveRecipeInstructions() {
-    return this.instructions;
-  }
+/* !It does not appear this method is being used any longer! */
+  // retrieveRecipeInstructions() {
+  //   return this.instructions;
+  // }
 
   toggleFavoritesStatus() {
     if (this.favoritesStatus === 'inactive') {
