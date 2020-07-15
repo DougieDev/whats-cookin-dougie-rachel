@@ -125,24 +125,6 @@ describe('Recipe', function() {
     expect(isRecipeInCategory).to.equal(false);
   });
 
-  /* !These tests are no longer relevant to their class! */
-
-  // it('should be able to check if it has a given ingredient', function() {
-  //   const ingredientSearchedId = 5;
-  //
-  //   const ingredientInRecipe = recipe.checkRecipeIngredients(ingredientSearchedId);
-  //
-  //   expect(ingredientInRecipe).to.equal(true);
-  // });
-  //
-  // it('should be able to check if it does not have a given ingredient', function () {
-  //   const ingredientSearchedId = 4;
-  //
-  //   const ingredientInRecipe = recipe.checkRecipeIngredients(ingredientSearchedId);
-  //
-  //   expect(ingredientInRecipe).to.equal(false);
-  // });
-
   it('should be able to calculate the total cost of its ingredients', function() {
     const ingredientsData = [
       {
@@ -175,14 +157,6 @@ describe('Recipe', function() {
 
     expect(ingredientsCost).to.equal(200);
   });
-
-  /* !These tests are no longer relevant to their class! */
-
-  // it('should be able to retrieve its instructions', function() {
-  //   const recipeInstructions = recipe.retrieveRecipeInstructions();
-  //
-  //   expect(recipeInstructions).to.deep.equal(recipe.instructions)
-  // });
 
   it('should be able to change its favorites status from inactive to active', function() {
     recipe.toggleFavoritesStatus();
