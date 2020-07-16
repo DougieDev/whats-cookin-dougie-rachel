@@ -5,9 +5,11 @@ const ingredientsData = require('../data/ingredients')
 const Ingredient = require('../src/Ingredient');
 
 describe('Ingredient', function() {
-  beforeEach(function() {
+  let ingredient1, ingredient2, blankIngredient; 
+  before(function() {
     ingredient1 = new Ingredient(ingredientsData[0])
     ingredient2 = new Ingredient(ingredientsData[1])
+    blankIngredient = new Ingredient() 
   });
 
   it('should be a function', function() {
@@ -26,12 +28,20 @@ describe('Ingredient', function() {
     expect(ingredient2.id).to.equal(18372)
   });
 
+  it('should have a default id of 0 if no ingredient is passed in', function () {
+    expect(blankIngredient.id).to.equal(0)
+  })
+
   it('should have a name', function() {
-    expect(ingredient1.name).to.equal("wheat flour")
+    expect(ingredient1.name).to.equal('wheat flour')
   });
 
   it('should be able to have a different name', function() {
-    expect(ingredient2.name).to.equal("bicarbonate of soda")
+    expect(ingredient2.name).to.equal('bicarbonate of soda')
+  });
+
+  it('should have an empty string as a default name if no ingredient is passed in', function () {
+    expect(blankIngredient.name).to.equal('')
   });
 
   it('should have an estimated cost in cents', function() {
@@ -40,5 +50,9 @@ describe('Ingredient', function() {
 
   it('should be able to have a different estimated cost', function() {
     expect(ingredient2.estimatedCostInCents).to.equal(582)
+  });
+
+  it('should have a default different estimated cost of 0 if no ingredient is passed in', function () {
+    expect(blankIngredient.estimatedCostInCents).to.equal(0)
   });
 })
