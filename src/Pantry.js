@@ -11,9 +11,9 @@ class Pantry {
       let missingAmount = recipeIngredient.quantity.amount - matchingIngredient.amount;
       if (missingAmount < 0) {
         missingAmount = 0;
-      };
+      }
       return missingAmount;
-    };
+    }
   }
 
   listMissingIngredients(recipe) {
@@ -21,7 +21,7 @@ class Pantry {
       let missingIngredientAmount = this.checkIngredientStockInPantry(ingredient);
       if (missingIngredientAmount > 0 ) {
         missingIngredients.push({ingredientId: ingredient.id, missingAmount: missingIngredientAmount});
-      };
+      }
       return missingIngredients;
     }, [])
   }

@@ -27,7 +27,7 @@ describe('Pantry', function() {
   });
 
   it('should be empty if no ingredients are passed in', function() {
-    pantry2 = new Pantry();
+    const pantry2 = new Pantry();
 
     expect(pantry2.ingredients).to.deep.equal([]);
   });
