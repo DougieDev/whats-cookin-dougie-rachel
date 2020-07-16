@@ -6,7 +6,7 @@ const Recipe = require('../src/Recipe');
 const Pantry = require('../src/Pantry');
 
 describe('User', function() {
-  let pantry1Info, pantry1, user1, pantry2Info, pantry2, user2, recipe1, recipe2;
+  let pantry1Info, pantry1, user1, pantry2Info, pantry2, user2, ingredients1, ingredients2, instructions1, instructions2, recipe1, recipe2;
   beforeEach(function() {
     pantry1Info = [
       {ingredient: 11477, amount: 4},
