@@ -6,7 +6,7 @@ const Recipe = require('../src/Recipe');
 const Pantry = require('../src/Pantry');
 
 describe('User', function() {
-  let pantry1Info, pantry1, user1, pantry2Info, pantry2, user2, ingredients1, ingredients2, instructions1, instructions2, recipe1, recipe2;
+  let pantry1Info, pantry1, user1, pantry2Info, pantry2, user2, ingredients1, ingredients2, instructions1, instructions2, recipe1, recipe2, blankUser;
   beforeEach(function() {
     pantry1Info = [
       {ingredient: 11477, amount: 4},
@@ -84,6 +84,7 @@ describe('User', function() {
       instructions2,
       'Pasta with Tomato Sauce',
       ['lunch', 'dinner']);
+    blankUser = new User(); 
   });
 
   it('should be a function', function() {
@@ -102,6 +103,10 @@ describe('User', function() {
     expect(user2.name).to.equal('Dougie');
   });
 
+  it('should have a default name if none is passed in', function () {
+    expect(blankUser.name).to.equal('Guest');
+  });
+
   it('should have a user ID', function() {
     expect(user1.id).to.equal(1);
   });
@@ -110,12 +115,20 @@ describe('User', function() {
     expect(user2.id).to.equal(2);
   })
 
+  it('should have a default user ID if none is passed in', function () {
+    expect(blankUser.id).to.equal(0);
+  });
+
   it('should have items in its pantry', function() {
     expect(user1.pantry.ingredients.length).to.equal(3);
   });
 
   it('should have different items in a different users pantry', function() {
     expect(user2.pantry.ingredients.length).to.equal(4);
+  });
+
+  it('should have an empty pantry if none is passed in', function () {
+    expect(blankUser.pantry).to.deep.equal([]);
   });
 
   it('should start with no favorite recipes', function() {
