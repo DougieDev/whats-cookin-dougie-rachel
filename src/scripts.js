@@ -1,16 +1,24 @@
 const recipeCardsSection = document.querySelector('.recipe-cards')
-const pageBody = document.querySelector('body');
+const mainSection = document.querySelector('main');
+const h1Logo = document.querySelector('.h1-logo');
+const navFilterDropdown = document.querySelector('.nav-filter');
+const navRecipeBoxDropdown = document.querySelector('.nav-recipe-box');
+const searchBar = document.querySelector('.search-bar');
 const homeSection = document.querySelector('.home-view');
 const singleRecipeSection = document.querySelector('.single-recipe-view');
 const listSection = document.querySelector('.list-view');
 let itemsList = document.querySelector('.list-items');
 const welcomeHeading = document.querySelector('.welcome-heading');
-const searchBar = document.querySelector('.search-bar');
+
 let recipes, user, ingredients, pantry;
 
 window.onload = setUpHomePage;
 
-pageBody.addEventListener('click', clickAnalyzer);
+mainSection.addEventListener('click', mainClickAnalyzer);
+h1Logo.addEventListener('click', goBackToHome);
+navFilterDropdown.addEventListener('click', analyzeStateForCategory);
+navRecipeBoxDropdown.addEventListener('click', checkNavItem);
+searchBar.addEventListener('keyup', executeSearch);
 
 function setUpHomePage() {
   recipes = instantiateRecipes(recipeData);
@@ -64,27 +72,33 @@ function displayWelcomeH2(category = 'Recipes') {
   welcomeHeading.innerText = `Welcome, ${user.name}! Browse Our ${category} Below.`;
 }
 
-function clickAnalyzer(event) {
+function mainClickAnalyzer(event) {
   if (event.target.classList.contains('heart')) {
     showRecipeInFavorites(event, 'heart');
   } else if (event.target.classList.contains('cookbook')) {
     showRecipeInToCook(event, 'cookbook');
   } else if (event.target.closest('.recipe-card')) {
     displaySingleRecipe(event);
-  } else if (event.target.closest('header')) {
-    event.preventDefault();
-    determineHeaderClick(event);
   }
 }
 
-function determineHeaderClick(event) {
-  if (event.target.classList.contains('category')) {
-    analyzeStateForCategory(event);
+function goBackToHome() {
+  displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
+  displayWelcomeH2();
+}
+
+function analyzeStateForCategory(event) {
+  event.preventDefault();
+  if (searchBar.placeholder === 'Search recipes') {
+    getRecipesInCategory(event, recipes);
+  } else if (searchBar.placeholder === 'Search saved recipes') {
+    let savedRecipes = user.getSavedRecipes();
+    getRecipesInCategory(event, savedRecipes);
   }
-  if (event.target.classList.contains('app-title') || event.target.id === 'site-icon') {
-    displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, recipes, 'Search recipes');
-    displayWelcomeH2();
-  }
+}
+
+function checkNavItem(event) {
+  event.preventDefault();
   if (event.target.id === 'favorite-recipes') {
     displayAppropriateRecipesInView(homeSection, singleRecipeSection, listSection, user.favoriteRecipes, 'Search saved recipes');
     displayOtherH2('Favorite Recipes');
@@ -102,12 +116,17 @@ function determineHeaderClick(event) {
     createAndDisplayGroceryList();
     createAndDisplayGroceryCost();
   }
-  if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search saved recipes') {
+}
+
+function executeSearch(event) {
+  if (searchBar.placeholder === 'Search recipes') {
+    displaySearchResults(recipes, `${searchBar.value} Search Results`)
+  } else {
     let savedRecipes = user.getSavedRecipes();
-    displaySearchResults(savedRecipes, 'Saved Recipes Search Results')
+    displaySearchResults(savedRecipes, `Saved Recipes ${searchBar.value} Search Results`)
   }
-  if (event.target.classList.contains('search-button') && searchBar.placeholder === 'Search recipes') {
-    displaySearchResults(recipes, 'Search Results')
+  if (event.key === 'Enter') {
+    searchBar.value = '';
   }
 }
 
@@ -171,15 +190,6 @@ function getRecipesFromSearch(recipesToSearch) {
       return recipe;
     }
   });
-}
-
-function analyzeStateForCategory(event) {
-  if (searchBar.placeholder === 'Search recipes') {
-    getRecipesInCategory(event, recipes);
-  } else if (searchBar.placeholder === 'Search saved recipes') {
-    let savedRecipes = user.getSavedRecipes();
-    getRecipesInCategory(event, savedRecipes);
-  }
 }
 
 function getRecipesInCategory(event, recipes) {

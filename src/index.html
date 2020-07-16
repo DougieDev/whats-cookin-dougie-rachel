@@ -10,19 +10,20 @@
   <body style="background-image: url(assets/checkered-pattern.png)">
     <header>
       <div class="search-section">
-        <form class="search" action="index.html" role="search">
+        <form class="search" action="index.html" role="search" onSubmit="return false">
           <input type="text" placeholder="Search recipes" name="search-bar" class="search-bar">
-          <button type="submit" class="search-button">Search</button>
         </form>
       </div>
       <div class="title-menu">
-        <h1 class="app-title">What's Cookin'
-          <img id="site-icon" src="assets/recipe-favicon.png" alt="chef hat">
-        </h1>
+        <section class="h1-logo">
+          <h1 class="app-title">What's Cookin'
+            <img id="site-icon" src="assets/recipe-favicon.png" alt="chef hat">
+          </h1>
+        </section>
         <nav>
           <div class="dropdown-menu">
             <button class="dropdown-btn">Filter Recipes</button>
-            <div class="dropdown-content">
+            <div class="dropdown-content nav-filter">
               <a href="" class ="category" id="appetizers">Appetizers</a>
               <a href="" class ="category" id="entrees">Entrees</a>
               <a href="" class ="category" id="saucesDips">Sauces & Dips</a>
@@ -34,7 +35,7 @@
           </div>
           <div class="dropdown-menu">
             <button class="dropdown-btn">My Recipe Box</button>
-            <div class="dropdown-content">
+            <div class="dropdown-content nav-recipe-box">
               <a href="" id="favorite-recipes">My Favorite Recipes</a>
               <a href="" id="recipes-to-cook">Recipes to Cook</a>
               <a href="" id="grocery-list-menu">Grocery List</a>
