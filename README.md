@@ -28,7 +28,7 @@ Carlyle 'Dougie' Douglas: <a href="https://github.com/DougieDev" target="\__blan
 
 - ...search recipes by their name or a specific ingredient...
 
-![app-gif](https://media.giphy.com/media/L1d5yzNBSguW1kAdhO/giphy.gif)
+![app-gif](https://media.giphy.com/media/W1qzRFhEy7KLNg2eUw/giphy.gif)
 
 - ...save recipes to 'Favorites' or add to a list of 'Recipes To Cook'...
 
